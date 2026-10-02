@@ -1,0 +1,108 @@
+{
+  "min_exposures": 5,
+  "exposures": {
+    "recommended": 219927,
+    "random": 1141393
+  },
+  "exposures_analysed": {
+    "recommended": 197474,
+    "random": 728872
+  },
+  "users_total": 27024,
+  "pooled": {
+    "recommended": 0.355931740986782,
+    "random": 0.08744840734085456
+  },
+  "headline": {
+    "users": 15128,
+    "recommended": 0.36344793390860963,
+    "random": 0.07877920643559652,
+    "lift": 0.2846687274730131,
+    "lift_interval": [
+      0.2818326585846448,
+      0.2877575481768182
+    ],
+    "ratio": 4.613500825319117,
+    "ratio_interval": [
+      4.542788579500246,
+      4.688061633664748
+    ],
+    "detectable_lift": 0.004323595507816512
+  },
+  "other_signals": {
+    "is_like": {
+      "users": 15128,
+      "recommended": 0.020235963092983447,
+      "random": 0.004675242535600759,
+      "lift": 0.015560720557382689,
+      "lift_interval": [
+        0.014516726898950654,
+        0.016600145655136515
+      ],
+      "ratio": 4.3283237048969845,
+      "ratio_interval": [
+        4.0050026768151845,
+        4.717188502721627
+      ],
+      "detectable_lift": 0.0014600432347694546
+    },
+    "is_hate": {
+      "users": 15128,
+      "recommended": 0.0006612775123699036,
+      "random": 0.0015044259103500315,
+      "lift": -0.0008431483979801279,
+      "lift_interval": [
+        -0.0011140790697250584,
+        -0.0005670723750885526
+      ],
+      "ratio": 0.43955472171842985,
+      "ratio_interval": [
+        0.3393025605053178,
+        0.5625533805487247
+      ],
+      "detectable_lift": 0.00038906251889686013
+    },
+    "watch_s": {
+      "users": 15128,
+      "recommended": 24.552700777833554,
+      "random": 6.19027389599619,
+      "lift": 18.362426881837365,
+      "lift_interval": [
+        18.083260961426056,
+        18.643696298315216
+      ],
+      "ratio": 3.9663351235094795,
+      "ratio_interval": [
+        3.914851049053859,
+        4.02281381001662
+      ],
+      "detectable_lift": 0.4070088740428919
+    }
+  },
+  "randomisation": {
+    "random": {
+      "videos_shown": 7299,
+      "top_10pct_videos_share": 0.11797864539207793,
+      "video_length_vs_user_activity": 0.0022794958893149033
+    },
+    "recommended": {
+      "videos_shown": 5682,
+      "top_10pct_videos_share": 0.6080517626303273,
+      "video_length_vs_user_activity": 0.025988683373121827
+    }
+  },
+  "popularity_split": {
+    "users": 15128,
+    "recommended_exposures_covered": 0.995974153559456,
+    "random": 0.07877920643559652,
+    "same_videos_to_anyone": 0.14832644508255158,
+    "recommended": 0.36360649064351797,
+    "from_video_choice": 0.06954723864695506,
+    "from_personal_fit": 0.2152800455609664,
+    "video_choice_share": 0.24417337278751067,
+    "video_choice_share_interval": [
+      0.23777107195328367,
+      0.25050546696235415
+    ]
+  }
+}
