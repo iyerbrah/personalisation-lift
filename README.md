@@ -4,11 +4,16 @@ Measures what a video recommender is worth, using an experiment in which a real 
 
 **Try it:** https://personalisation-lift-dkvysrjbxfpijjzcnot9ju.streamlit.app/
 
-## The finding
+**Built with:** Python, pandas, NumPy, Plotly, Streamlit
 
-Users watched recommended videos at length **4.6 times** as often as random ones: 36.3% against 7.9%. That is 285 extra long views for every 1,000 videos shown.
+![The Lift page: recommended videos are watched at length 4.6 times as often as random ones](docs/lift.png)
 
-About a quarter of that gain comes from showing videos that most people like. The other three quarters comes from showing each user the videos that suit them.
+## Key findings
+
+- **Recommended videos were watched at length 4.6 times as often as random ones.** 36.3% against 7.9%, which is 285 extra long views for every 1,000 videos shown.
+- **Most of the gain is matching, not popularity.** About a quarter comes from showing videos that most people like. The other three quarters comes from showing each user the videos that suit them.
+- **Every type of user gains by a similar factor.** The ratio is between 4.1x and 4.7x for daily, frequent, occasional and new users.
+- **Known limit:** videos were randomised, not users, so this measures watching and not retention (see [Limitations](#limitations)).
 
 ## Why I built it
 
@@ -19,6 +24,17 @@ Kuaishou, a short-video app, did this for 17 days in 2022 and published the logs
 1. How much more do people watch recommended videos than random ones?
 2. Is that true for every type of user?
 3. Is the recommender matching videos to people, or only showing popular videos?
+
+## What it does
+
+| Step | What happens |
+|---|---|
+| 1. Data | The app's logs become one row per video shown, marked as recommended or random: 27,024 users, 1,361,320 videos shown |
+| 2. Lift | Each user's long-view rate on recommended videos is compared with their own rate on random ones |
+| 3. Segments | The comparison is repeated for eight types of user |
+| 4. Popularity or fit | Each video's watch rate under random exposure is used to split the lift into two parts |
+| 5. Checks | The result is tested day by day, across sample cut-offs, and for even randomisation |
+| 6. App | A Streamlit app shows the lift, the segments and the split |
 
 ## The data
 
@@ -78,6 +94,8 @@ Each video was shown at random to many users, so its long-view rate there is its
 
 So 24% of the lift (95% interval 24% to 25%) comes from choosing well-liked videos, and 76% from matching them to the user. A feed of popular videos alone would capture only a quarter of the gain.
 
+![The Popularity or fit page: random videos, the recommended videos shown to anyone, and shown to their user](docs/popularity_or_fit.png)
+
 ## Checks
 
 - **Random videos were spread evenly.** The most-shown 10% of videos took 12% of random showings, against 61% of recommended ones. An even spread would be 10%.
@@ -118,6 +136,7 @@ src/build_dataset.py   Raw logs to one row per video shown
 src/lift.py            The lift, the segments, the checks and the popularity split
 reports/               Results the app reads
 data/processed/        The cleaned dataset and one row per user
+docs/                  Screenshots used in this README
 ```
 
 Data: Gao et al., *KuaiRand: An Unbiased Sequential Recommendation Dataset with Randomly Exposed Videos*, CIKM 2022. The dataset is shared under CC BY-SA 4.0, and the processed files here are shared under the same licence.
