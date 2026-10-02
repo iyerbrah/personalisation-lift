@@ -3,7 +3,7 @@ import streamlit as st
 
 from charts import load_report
 
-st.set_page_config(page_title="Personalisation Lift", page_icon=":material/recommend:")
+st.set_page_config(page_title="Recommender Engagement Experiment", page_icon=":material/recommend:")
 
 pages = [
     st.Page("views/lift.py", title="Lift", icon=":material/trending_up:", default=True),

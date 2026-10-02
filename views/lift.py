@@ -9,7 +9,7 @@ report = load_report()
 headline = report["headline"]
 low, high = headline["lift_interval"]
 
-st.title("Personalisation lift")
+st.title("Recommender engagement experiment")
 st.write("What a recommender is worth: the share of videos watched at length, for videos it chose "
          "and for videos chosen at random, shown to the same users in the same feed.")
 

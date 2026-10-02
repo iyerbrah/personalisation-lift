@@ -1,4 +1,4 @@
-# Personalisation Lift
+# Recommender Engagement Experiment
 
 Measures what a video recommender is worth, using an experiment in which a real app replaced some recommended videos with random ones.
 
