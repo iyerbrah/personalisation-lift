@@ -2,7 +2,7 @@
 
 Measures what a video recommender is worth, using an experiment in which a real app replaced some recommended videos with random ones.
 
-**Try it:** _add the Streamlit link after deploying_
+**Try it:** https://personalisation-lift-dkvysrjbxfpijjzcnot9ju.streamlit.app/
 
 ## The finding
 
