@@ -1,19 +1,30 @@
-# Recommender Engagement Experiment
+# Recommender Engagement Experiment: what is a recommender worth?
 
-Measures what a video recommender is worth, using an experiment in which a real app replaced some recommended videos with random ones.
+Measures what a video recommender is worth, using an experiment in which a real app replaced some recommended videos with random ones. Each user saw both kinds in the same feed and the same weeks, so each user is their own control.
 
-**Try it:** https://personalisation-lift-dkvysrjbxfpijjzcnot9ju.streamlit.app/
+[![CI](https://github.com/iyerbrah/personalisation-lift/actions/workflows/ci.yml/badge.svg)](https://github.com/iyerbrah/personalisation-lift/actions/workflows/ci.yml)
+[![Live app](https://img.shields.io/badge/live-Streamlit%20app-3987e5)](https://personalisation-lift-dkvysrjbxfpijjzcnot9ju.streamlit.app/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-199e70)](LICENSE)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-3776ab)](requirements.txt)
 
-**Built with:** Python, pandas, NumPy, Plotly, Streamlit
+**[Try the live app →](https://personalisation-lift-dkvysrjbxfpijjzcnot9ju.streamlit.app/)** · Built by [Ram Iyer](https://github.com/iyerbrah) · *Hosted on Streamlit Community Cloud: if it has gone to sleep, click to wake it and give it a minute.*
 
 ![The Lift page: recommended videos are watched at length 4.6 times as often as random ones](docs/lift.png)
 
-## Key findings
+## Highlights
 
 - **Recommended videos were watched at length 4.6 times as often as random ones.** 36.3% against 7.9%, which is 285 extra long views for every 1,000 videos shown.
 - **Most of the gain is matching, not popularity.** About a quarter comes from showing videos that most people like. The other three quarters comes from showing each user the videos that suit them.
 - **Every type of user gains by a similar factor.** The ratio is between 4.1x and 4.7x for daily, frequent, occasional and new users.
+- **Checked before it's believed.** The random arm really was random, the gap holds on every one of the 17 days, the answer doesn't move with the user cut-off, and the segment intervals are corrected for testing eight groups.
+- **Tested like software.** 18 offline tests in CI check the statistics on tables with known answers, that the reports agree with each other, that the README's numbers match the reports, and that all three pages render.
 - **Known limit:** videos were randomised, not users, so this measures watching and not retention (see [Limitations](#limitations)).
+
+**Stack:** Python · pandas · NumPy · Plotly · Streamlit · pytest · GitHub Actions
+
+| The headline lift | Who benefits | Popularity or fit |
+| --- | --- | --- |
+| ![The Lift page: 15,128 users compared, 28.5 points of lift](docs/app.jpg) | ![Lift by type of user, with corrected intervals](docs/who_benefits.jpg) | ![Random videos, the recommended videos shown to anyone, and shown to their user](docs/popularity_fit.jpg) |
 
 ## Why I built it
 
@@ -24,6 +35,16 @@ Kuaishou, a short-video app, did this for 17 days in 2022 and published the logs
 1. How much more do people watch recommended videos than random ones?
 2. Is that true for every type of user?
 3. Is the recommender matching videos to people, or only showing popular videos?
+
+## How it works
+
+```mermaid
+flowchart LR
+  K[KuaiRand-Pure logs<br/>17 days, 2022] --> B[build_dataset.py<br/>one row per video shown,<br/>recommended or random]
+  B --> L[lift.py<br/>per-user lift, bootstrap intervals,<br/>segments, checks, popularity split]
+  L --> R[reports/*.json, *.csv]
+  R --> A[Streamlit app]
+```
 
 ## What it does
 
@@ -94,6 +115,14 @@ The first step (7.9% to 14.8%) is the gain from choosing well-liked videos: 24% 
 - **The sample is large enough.** It could detect a lift as small as 0.4 points.
 - **Segments are corrected for multiple tests.** Eight groups are compared, so each interval is widened to keep 95% cover across all of them.
 
+## Key decisions
+
+- **Each user is their own control.** Comparing a user's recommended videos with their own random ones removes differences between heavy and light users, which a pooled average would mix in.
+- **Intervals from resampling users, not videos.** Views by the same person aren't independent, so the bootstrap resamples whole users, 2,000 times.
+- **A fair split of the gain.** A video's long-view rate when shown at random is its appeal to an average user; giving every recommended video that rate separates choosing popular videos from matching them to people.
+- **Corrected for many comparisons.** Eight user groups are compared, so each interval is widened to keep 95% cover across all of them.
+- **Checks before claims.** The random arm's spread, every day's gap, and five different user cut-offs are all reported, so the headline can be judged, not just read.
+
 ## Limitations
 
 - **This is not a two-group A/B test.** Videos were randomised, not users. It measures what people did with each video, not whether a worse feed makes them leave.
@@ -102,31 +131,34 @@ The first step (7.9% to 14.8%) is the gain from choosing well-liked videos: 24% 
 - **Rare and new users are under-represented.** Those with five videos of each kind are the more active members of that group.
 - **The setting differs from long-form streaming.** These are short videos on a Chinese app in 2022. The method carries over; the numbers may not.
 
-## Run it
+## Repository tour
+
+| Path | What's there |
+| --- | --- |
+| [`src/build_dataset.py`](src/build_dataset.py) | Raw KuaiRand logs to one row per video shown, marked recommended or random |
+| [`src/lift.py`](src/lift.py) | The lift, the bootstrap intervals, the segments, the checks and the popularity split |
+| [`app.py`](app.py), [`views/`](views/), [`charts.py`](charts.py) | The Streamlit app: lift, who benefits, popularity or fit |
+| [`reports/`](reports/) | The results the app reads |
+| [`data/processed/`](data/processed/) | The cleaned dataset and one row per user |
+| [`tests/`](tests/) | 18 offline tests: the statistics, report consistency, README numbers, all three pages |
+| [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | Lint and tests on every pull request |
+
+## Run locally
 
 ```bash
-pip install -r requirements.txt
-streamlit run app.py
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+.venv/bin/streamlit run app.py
+.venv/bin/pytest -q          # 18 tests, all offline
 ```
 
-The results are in the repo, so the app runs as is. To rebuild them, download `KuaiRand-Pure.tar.gz` from [Zenodo](https://zenodo.org/records/10439422), unpack it into `data/raw/`, and run:
+The results are in the repo, so the app and the tests run as they are. To rebuild them, download `KuaiRand-Pure.tar.gz` from [Zenodo](https://zenodo.org/records/10439422), unpack it into `data/raw/`, and run:
 
 ```bash
 python src/build_dataset.py
 python src/lift.py
 ```
 
-## Files
+## License
 
-```
-app.py                 Entry point: sidebar and page navigation
-views/                 The three pages: lift, who benefits, popularity or fit
-charts.py              Data loading and the chart both result pages use
-src/build_dataset.py   Raw logs to one row per video shown
-src/lift.py            The lift, the segments, the checks and the popularity split
-reports/               Results the app reads
-data/processed/        The cleaned dataset and one row per user
-docs/                  Screenshots used in this README
-```
-
-Data: Gao et al., *KuaiRand: An Unbiased Sequential Recommendation Dataset with Randomly Exposed Videos*, CIKM 2022. The dataset is shared under CC BY-SA 4.0, and the processed files here are shared under the same licence.
+The code is under the [MIT license](LICENSE). Data: Gao et al., *KuaiRand: An Unbiased Sequential Recommendation Dataset with Randomly Exposed Videos*, CIKM 2022. The dataset is shared under CC BY-SA 4.0, and the processed files here are shared under the same licence.
