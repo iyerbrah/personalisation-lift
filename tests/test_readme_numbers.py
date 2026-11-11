@@ -25,7 +25,8 @@ def test_dataset_size():
 
 def test_segments_table():
     segments = pd.read_csv("reports/segments.csv")
-    for row in segments[segments.trait == "activity"].itertuples():
+    assert set(segments.trait) == {"activity", "tenure"}
+    for row in segments.itertuples():
         assert f"| {row.group} | {row.users:,} | {row.recommended:.1%} | {row.random:.1%} | {row.ratio:.1f}x |" in README
 
 
