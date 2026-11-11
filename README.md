@@ -15,7 +15,7 @@ Measures what a video recommender is worth, using an experiment in which a real 
 
 - **Recommended videos were watched at length 4.6 times as often as random ones.** 36.3% against 7.9%, which is 285 extra long views for every 1,000 videos shown.
 - **Most of the gain is matching, not popularity.** About a quarter comes from showing videos that most people like. The other three quarters comes from showing each user the videos that suit them.
-- **Every type of user gains by a similar factor.** The ratio is between 4.1x and 4.7x for daily, frequent, occasional and new users.
+- **Every type of user gains by a similar factor.** The ratio is between 4.1x and 4.7x in all eight groups: daily, frequent, occasional and rare or new users, and accounts of every age from under 6 months to over 2 years.
 - **Checked before it's believed.** The random arm really was random, the gap holds on every one of the 17 days, the answer doesn't move with the user cut-off, and the segment intervals are corrected for testing eight groups.
 - **Tested like software.** 18 offline tests in CI check the statistics on tables with known answers, that the reports agree with each other, that the README's numbers match the reports, and that all three pages render.
 - **Known limit:** videos were randomised, not users, so this measures watching and not retention (see [Limitations](#limitations)).
@@ -52,7 +52,7 @@ flowchart LR
 |---|---|
 | 1. Data | The logs become one row per video shown, marked as recommended or random: 27,024 users, 1,361,320 videos shown |
 | 2. Lift | Each user's long-view rate on recommended videos is compared with their own rate on random ones |
-| 3. Segments | The comparison is repeated for eight types of user |
+| 3. Segments | The comparison is repeated for eight groups of users: four by how often they use the app, and four by how long they have had an account |
 | 4. Popularity or fit | The lift is split into two parts: choosing well-liked videos, and matching them to the user |
 | 5. App | A Streamlit app shows the lift, the segments and the split |
 
@@ -84,6 +84,10 @@ The lift in long views is 28.5 percentage points (95% interval 28.2 to 28.8). 91
 
 ### By type of user
 
+Users are split two ways, by how often they use the app and by how long they have had an account, which makes eight groups. The intervals are corrected for testing all eight.
+
+**By how often they use the app**
+
 | Group | Users | Recommended | Random | Ratio |
 |---|---|---|---|---|
 | Daily | 10,153 | 34.2% | 7.3% | 4.7x |
@@ -92,6 +96,17 @@ The lift in long views is 28.5 percentage points (95% interval 28.2 to 28.8). 91
 | Rare or new | 548 | 40.9% | 9.9% | 4.1x |
 
 I expected rare and new users to gain much less, because the recommender has little history for them. Their ratio is the lowest, but its interval (3.7 to 4.6) overlaps the others, so this data does not confirm it.
+
+**By how long they have had an account**
+
+| Group | Users | Recommended | Random | Ratio |
+|---|---|---|---|---|
+| Over 2 years | 10,802 | 35.0% | 7.5% | 4.7x |
+| 1 to 2 years | 2,043 | 38.9% | 8.6% | 4.5x |
+| 6 to 12 months | 1,114 | 39.2% | 9.1% | 4.3x |
+| Under 6 months | 1,168 | 41.2% | 9.2% | 4.5x |
+
+Newer accounts watch a little more of both kinds, and the ratio barely moves: between 4.3x and 4.7x.
 
 ### Popularity or fit
 
@@ -120,7 +135,7 @@ The first step (7.9% to 14.8%) is the gain from choosing well-liked videos: 24% 
 - **Each user is their own control.** Comparing a user's recommended videos with their own random ones removes differences between heavy and light users, which a pooled average would mix in.
 - **Intervals from resampling users, not videos.** Views by the same person aren't independent, so the bootstrap resamples whole users, 2,000 times.
 - **A fair split of the gain.** A video's long-view rate when shown at random is its appeal to an average user; giving every recommended video that rate separates choosing popular videos from matching them to people.
-- **Corrected for many comparisons.** Eight user groups are compared, so each interval is widened to keep 95% cover across all of them.
+- **Corrected for many comparisons.** Eight user groups (four activity levels and four account ages) are compared, so each interval is widened to keep 95% cover across all of them.
 - **Checks before claims.** The random arm's spread, every day's gap, and five different user cut-offs are all reported, so the headline can be judged, not just read.
 
 ## Limitations
